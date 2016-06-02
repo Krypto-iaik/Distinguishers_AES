@@ -19,7 +19,7 @@ Distinguishers:
 3) AES_4RoundDistinguisher.c
 
 The programs should run with almost C-compilers (we have used gcc version 4.8.1).
-Note that no ones of these programs is optimized!
+None of these programs is speed-optimized, they are for verification purposes only.
 
 In all the programs, the main function is always the last one.
 
