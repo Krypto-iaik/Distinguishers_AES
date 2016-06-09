@@ -55,4 +55,7 @@ Then it checks that for the AES case, there is at least one Delta for which the 
 The secret key can be chosen/changed in the main function.
 The time of execution is approximately of 240 seconds.
 
-
+The pseudo-random generator used in this program is the "Mersenne Twister" one, developed by 1997 by Makoto Matsumoto
+and Takuji Nishimura - MT19937. 
+The complete source code and explanation of this random generator can be found in:
+http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
