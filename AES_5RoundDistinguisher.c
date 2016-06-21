@@ -820,15 +820,15 @@ int contNumberCollisionRandom()
             }while(flag2 == 1);
         }
 
-        for(i = 0; i<16; i++)
+        for(l = 0; l<16; l++)
         {
-            for(j=i+1; j<16; j++)
+            for(j=l+1; j<16; j++)
             {
                 for(t = 0; t<4; t++)
                 {
                     for(s = 0; s<4; s++)
                     {
-                        temp3[s][t] = cipher[i][s+4*t] ^ cipher[j][s+4*t];
+                        temp3[s][t] = cipher[l][s+4*t] ^ cipher[j][s+4*t];
                     }
                 }
 
