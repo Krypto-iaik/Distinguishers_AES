@@ -930,7 +930,7 @@ int main()
     printf("Secret Key Distinguisher for 5 Rounds Small Scale AES.\n\n");
 
     printf("It works as follow: for each one of the 2^32 possible values of Delta (i.e. for each collection), it generates ");
-    printf("%d different V_\Delta sets (each one with 2^8 texts). Then it checks if there is at least one collision.\n\n", N_TEST);
+    printf("%d different W_\Delta sets (each one with 2^8 texts). Then it checks if there is at least one collision.\n\n", N_TEST);
 
     printf("First step: AES\n");
     printf("We check if it recognize an AES permutation and it print the right key.\n");
