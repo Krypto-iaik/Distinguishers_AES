@@ -605,8 +605,8 @@ int belongToW(word8 p[][4])
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**The function generate the number of texts (IN THE SAME COSET OF U) chosen by the parameter NUMBER_CP.
-Then, for each possible pairs it count the number of pairs of texts that belong to the same coset of W.*/
+/**The function generates the number of texts (IN THE SAME COSET OF D) chosen by the parameter NUMBER_CP.
+Then, for each possible pairs it counts the number of pairs of texts that belong to the same coset of M.*/
 
 int subspaceTest(word8 key[][4])
 {
@@ -686,8 +686,8 @@ int subspaceTest(word8 key[][4])
 
 }
 
-/**The function generate the random texts (the number is chosen by the parameter NUMBER_CP).
-Then, for each possible pairs it count the number of pairs of texts that belong to the same coset of W.*/
+/**The function generates the random texts (the number is chosen by the parameter NUMBER_CP), which correspond to the ciphertexts.
+Then, for each possible pairs it counts the number of pairs of texts that belong to the same coset of M.*/
 
 int randomTest(word8 key[][4])
 {
@@ -771,8 +771,9 @@ int randomTest(word8 key[][4])
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**The program checks that in the subspace case and considering 4 Reduced Round AES, the probability that two texts collide
-in the same coset of W is 0 subpace case, and at least one in the random case */
+/**The program verifies the impossible differential distinguisher on 4 Reduced Round AES.
+That is, it checks that the probability that two texts collide in the same coset of M is 0 subspace case,
+while at least one collision occur in the random case */
 
 //FOR 80000 texts, TIME OF EXECUTIONs: 120 sec.
 
@@ -790,9 +791,10 @@ int main()
 
     int numero = 0, numero2 = 0, flag = 0;
 
-    printf("CHECK COLLISION FOR 4-Round Reduced AES.\n\n");
+    printf("IMPOSSIBLE DIFFERENTIAL DISTINGUISHER on 4-Round Reduced AES.\n\n");
+    printf("The program checks that the probability that two texts collide in the same coset of M is 0 subspace case, ");
+    printf("while at least one collision occur in the random case.\n\n");
     printf("Number of texts: %d\n\n", NUMBER_CP);
-
     //initialize seed
     srand (time(NULL));
 
