@@ -605,8 +605,8 @@ int belongToW(word8 p[][4])
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**The function generate the number of texts (IN THE SAME COSET OF U) chosen by the parameter NUMBER_CP.
-Then, for each possible pairs it count the number of pairs of texts that belong to the same coset of W.*/
+/**The function generates the number of texts (IN THE SAME COSET OF D) chosen by the parameter NUMBER_CP.
+Then, for each possible pairs it counts the number of pairs of texts that belong to the same coset of M.*/
 
 int subspaceTest(word8 key[][4])
 {
@@ -686,8 +686,8 @@ int subspaceTest(word8 key[][4])
 
 }
 
-/**The function generate the random texts (the number is chosen by the parameter NUMBER_CP).
-Then, for each possible pairs it count the number of pairs of texts that belong to the same coset of W.*/
+/**The function generates the random texts (the number is chosen by the parameter NUMBER_CP), which correspond to the ciphertext.
+Then, for each possible pairs it counts the number of pairs of texts that belong to the same coset of M.*/
 
 int randomTest(word8 key[][4])
 {
@@ -772,7 +772,7 @@ int randomTest(word8 key[][4])
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**The program checks that in the subspace case and considering 3 Reduced Round AES, the probability that two texts collide
-in the same coset of W is higher in the susbpace case than in the random case */
+in the same coset of M is higher in the subspace case than in the random case */
 
 int main()
 {
