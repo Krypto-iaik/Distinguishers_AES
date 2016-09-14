@@ -1,33 +1,24 @@
 /**The Random Generator used in this code is the "Mersenne Twister" one, developed by 1997 by Makoto Matsumoto
 and Takuji Nishimura - MT19937.
-
 The complete source code of the random generator can be found in http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c
 We also attach the following:
-
 "A C-program for MT19937, with initialization improved 2002/1/26.
    Coded by Takuji Nishimura and Makoto Matsumoto.
-
-   Before using, initialize the state by using init_genrand(seed)  
+   Before using, initialize the state by using init_genrand(seed)
    or init_by_array(init_key, key_length).
-
    Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
-   All rights reserved.                          
-
+   All rights reserved.
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-
      1. Redistributions of source code must retain the above copyright
         notice, this list of conditions and the following disclaimer.
-
      2. Redistributions in binary form must reproduce the above copyright
         notice, this list of conditions and the following disclaimer in the
         documentation and/or other materials provided with the distribution.
-
-     3. The names of its contributors may not be used to endorse or promote 
-        products derived from this software without specific prior written 
+     3. The names of its contributors may not be used to endorse or promote
+        products derived from this software without specific prior written
         permission.
-
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -39,8 +30,6 @@ We also attach the following:
    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
    Any feedback is very welcome.
    http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
    email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)"
@@ -667,7 +656,6 @@ int belongToW(word8 p[][4])
 for a fixed combination of delta0, delta1, delta2, delta3, it generates the corresponding collection, that is sets of plaintexts
 W_\Delta and the corresponding ciphertexts.
 Then it counts the number of collision in M.
-
 It returns 1 if there is at least one collision; 0 otherwise.
 In this last cast, it prints the possible right key.*/
 
@@ -763,7 +751,6 @@ for a fixed combination of delta0, delta1, delta2, delta3, it generates the corr
 W_\Delta and the corresponding ciphertexts.
 For simplicity, the ciphertexts are generated in a random way.
 Then it counts the number of collision in M.
-
 It returns 1 if there is at least one collision; 0 otherwise.*/
 
 int contNumberCollisionRandom()
@@ -933,7 +920,7 @@ int main()
     printf("%d different W_\Delta sets (each one with 2^8 texts). Then it checks if there is at least one collision.\n\n", N_TEST);
 
     printf("First step: AES\n");
-    printf("We check if it recognize an AES permutation and it print the right key.\n");
+    printf("We check if it recognizes an AES permutation. In this case, it prints the right key.\n");
     printf("Possible keys (row/column): 0/0 - 1/1 - 2/2 - 3/3\n");
 
     result = distinguisher5Rounds(key, 0);
@@ -961,4 +948,3 @@ int main()
 
     return (0);
 }
-
