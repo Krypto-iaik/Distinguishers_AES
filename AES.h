@@ -5,13 +5,16 @@
 
 typedef unsigned char word8;
 
-void addRoundKey(word8 *p, word8 key[][4]);
-void invAddRoundKey(word8 *p, word8 key[][4][N_Round+1], int costante);
+void addRoundKey(word8 p[4][4], word8 key[][4]);
+void invAddRoundKey(word8 p[4][4], word8 key[][4][N_Round+1], int costante);
 
-void shiftRows(word8 *p);
-void inverseShiftRows(word8 *p);
+void byteSubTransformation(word8 p[4][4]);
+void inverseByteSubTransformation(word8 p[4][4]);
 
-void mixColumn(word8 *p);
-void inverseMixColumn(word8 *p);
+void shiftRows(word8 p[4][4]);
+void inverseShiftRows(word8 p[4][4]);
+
+void mixColumn(word8 p[4][4]);
+void inverseMixColumn(word8 p[4][4]);
 
 #endif // __AES_H__

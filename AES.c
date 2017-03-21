@@ -89,25 +89,25 @@ void inizializzazione2(word8 *p, unsigned char initialMessage[][4]){
 
 /*Add Round Key*/
 
-void addRoundKey(word8 *p, word8 key[][4]){
+void addRoundKey(word8 p[4][4], word8 key[][4]){
 
   int i, j;
 
   for(i=0; i<4; i++){
     for(j=0; j<4; j++){
-      *(p+j+4*i) ^= key[i][j];
+      p[i][j] ^= key[i][j];
     }
   }
 
 }
 
-void addRoundKey2(word8 *p, word8 key[][4][N_Round+1], int costante){
+void addRoundKey2(word8 p[4][4], word8 key[][4][N_Round+1], int costante){
 
   int i, j;
 
   for(i=0; i<4; i++){
     for(j=0; j<4; j++){
-      *(p+j+4*i) ^= key[i][j][costante];
+      p[i][j] ^= key[i][j][costante];
     }
   }
 
@@ -115,7 +115,7 @@ void addRoundKey2(word8 *p, word8 key[][4][N_Round+1], int costante){
 
 /*Inverse Add round key*/
 
-void invAddRoundKey(word8 *p, word8 key[][4][N_Round+1], int costante){
+void invAddRoundKey(word8 p[4][4], word8 key[][4][N_Round+1], int costante){
 
   word8 keytemp[4][4];
 
@@ -126,11 +126,11 @@ void invAddRoundKey(word8 *p, word8 key[][4][N_Round+1], int costante){
       keytemp[i][j]=key[i][j][costante];
   }
 
-  inverseMixColumn(&(keytemp[0][0]));
+  inverseMixColumn(keytemp);
 
    for(i=0; i<4; i++){
     for(j=0; j<4; j++){
-      *(p+j+4*i) ^= keytemp[i][j];
+      p[i][j] ^= keytemp[i][j];
     }
   }
 
@@ -206,25 +206,25 @@ word8 inverseByteTransformation(word8 byte){
 
 /*ByteTransformation*/
 
-void byteSubTransformation(word8 *puntatore){
+void byteSubTransformation(word8 p[4][4]){
 
   int i, j;
 
   for(i=0; i<4; i++){
     for(j=0; j<4; j++)
-      *(puntatore+j+4*i)=byteTransformation(*(puntatore+j+4*i));
+      p[i][j]=byteTransformation(p[i][j]);
   }
 }
 
 /*Inverse Byte Transformation*/
 
-void inverseByteSubTransformation(word8 *puntatore){
+void inverseByteSubTransformation(word8 p[4][4]){
 
   int i, j;
 
   for(i=0; i<4; i++){
     for(j=0; j<4; j++)
-      *(puntatore+j+4*i)=inverseByteTransformation(*(puntatore+j+4*i));
+      p[i][j]=inverseByteTransformation(p[i][j]);
   }
 }
 
@@ -331,40 +331,40 @@ void generationRoundKey2(word8 *pKey, int numeroRound, word8 *pKeyPrecedente){
 
 /*shift rows*/
 
-void shiftRows(word8 *p){
+void shiftRows(word8 p[4][4]){
 
   word8 temp[3];
   int i, j;
 
   for(i=1;i<4;i++){
     for(j=0;j<i;j++)
-      temp[j]=*(p+4*i+j);
+      temp[j]=p[i][j];
 
     for(j=0;j<(4-i);j++)
-      *(p+4*i+j)=*(p+4*i+j+i);
+      p[i][j]=p[i][j+i];
 
     for(j=(4-i);j<4;j++)
-      *(p+4*i+j)=temp[j-4+i];
+      p[i][j]=temp[j-4+i];
   }
 
 }
 
 /*inverse shift rows*/
 
-void inverseShiftRows(word8 *p){
+void inverseShiftRows(word8 p[4][4]){
 
   word8 temp[3];
   int i, j;
 
   for(i=1;i<4;i++){
     for(j=3;j>(3-i);j--)
-      temp[j-1]=*(p+4*i+j);
+      temp[j-1]=p[i][j];
 
     for(j=3;j>i-1;j--)
-      *(p+4*i+j)=*(p+4*i+j-i);
+      p[i][j] = p[i][j-i];
 
     for(j=0;j<i;j++)
-      *(p+4*i+j)=temp[3-i+j];
+      p[i][j] = temp[3-i+j];
   }
 
 }
@@ -373,7 +373,7 @@ void inverseShiftRows(word8 *p){
 
 /*MixColumn*/
 
-void mixColumn(word8 *p){
+void mixColumn(word8 p[4][4]){
 
   int i, j;
   word8 colonna[4], nuovaColonna[4];
@@ -383,7 +383,7 @@ void mixColumn(word8 *p){
 
     //prendo la colonna i-sima
     for(j=0;j<4;j++){
-      colonna[j]=*(p + i + 4*j);
+      colonna[j]=p[j][i];
     }
 
     //calcolo nuova colonna
@@ -394,7 +394,7 @@ void mixColumn(word8 *p){
 
     //reinserisco colonna
     for(j=0;j<4;j++){
-      *(p + i + 4*j)=nuovaColonna[j];
+      p[j][i]=nuovaColonna[j];
     }
 
   }
@@ -403,7 +403,7 @@ void mixColumn(word8 *p){
 
 /*inverse MixColumn*/
 
-void inverseMixColumn(word8 *p){
+void inverseMixColumn(word8 p[4][4]){
 
   int i, j;
   word8 colonna[4], nuovaColonna[4];
@@ -413,7 +413,7 @@ void inverseMixColumn(word8 *p){
 
     //prendo la colonna i-sima
     for(j=0;j<4;j++){
-      colonna[j]=*(p + i + 4*j);
+      colonna[j]=p[j][i];
     }
 
     //calcolo nuova colonna
@@ -435,7 +435,7 @@ void inverseMixColumn(word8 *p){
 
     //reinserisco colonna
     for(j=0;j<4;j++){
-      *(p + i + 4*j)=nuovaColonna[j];
+      p[j][i]=nuovaColonna[j];
     }
 
   }
@@ -451,31 +451,31 @@ void cifratura(word8 initialMessage[][4], word8 initialKey[][4], word8 *messaggi
   int i, j;
 
   //inizializzo lo stato
-  unsigned char state[4][4];
+  word8 state[4][4];
   inizializzazione(&(state[0][0]), initialMessage);
 
   //inizializzo la chiave
-  unsigned char key[4][4];
+  word8 key[4][4];
   inizializzazione(&(key[0][0]), initialKey);
 
   //Initial Round
-  addRoundKey(&(state[0][0]), key);
+  addRoundKey(state, key);
 
   //Round
   for(i=0; i<N_Round-1; i++){
     generationRoundKey(&(key[0][0]), i);
-    byteSubTransformation(&(state[0][0]));
-    shiftRows(&(state[0][0]));
-    mixColumn(&(state[0][0]));
-    addRoundKey(&(state[0][0]), key);
+    byteSubTransformation(state);
+    shiftRows(state);
+    mixColumn(state);
+    addRoundKey(state, key);
 
   }
 
   //Final Round
   generationRoundKey(&(key[0][0]), N_Round-1);
-  byteSubTransformation(&(state[0][0]));
-  shiftRows(&(state[0][0]));
-  addRoundKey(&(state[0][0]), key);
+  byteSubTransformation(state);
+  shiftRows(state);
+  addRoundKey(state, key);
 
   //salvo messaggio cifrato
   for(i=0; i<4; i++){
@@ -510,25 +510,25 @@ void decifratura(word8 initialMessage[][4], word8 initialKey[][4], word8 *messag
 
 
   //Initial Round
-  addRoundKey2(&(state[0][0]), key, N_Round);
+  addRoundKey2(state, key, N_Round);
 
 
   //Round
   for(i=N_Round-1; i>0; i--){
-    inverseByteSubTransformation(&(state[0][0]));
+    inverseByteSubTransformation(state);
 
-    inverseShiftRows(&(state[0][0]));
+    inverseShiftRows(state);
 
-    inverseMixColumn(&(state[0][0]));
+    inverseMixColumn(state);
 
-    invAddRoundKey(&(state[0][0]), key, i);
+    invAddRoundKey(state, key, i);
 
   }
 
   //Final Round
-  inverseByteSubTransformation(&(state[0][0]));
-  inverseShiftRows(&(state[0][0]));
-  addRoundKey2(&(state[0][0]), key, 0);
+  inverseByteSubTransformation(state);
+  inverseShiftRows(state);
+  addRoundKey2(state, key, 0);
 
   for(i=0;i<4;i++){
     for(j=0;j<4;j++)
@@ -629,7 +629,7 @@ int main(){
 
   int i, j, k, flag;
 
-  srand(time(NULL));
+  srand(1337);//time(NULL));
 
   for(i=0;i<NUMERO_PROVE; i++){
 
