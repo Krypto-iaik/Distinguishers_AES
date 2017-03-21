@@ -41,6 +41,7 @@ We also attach the following:
 
 #include "AES_common.h"
 #include "AES_smallScale_sbox.h"
+#include "multiplication.h"
 #include "subspace_checks.h"
 
 #define N_TEST 4100
@@ -59,21 +60,6 @@ static int mti=N+1; /* mti==N+1 means mt[N] is not initialized */
 
 
 /**Several ways to generate random number*/
-
-int randomInRange(int min, int max){
-
-  int range = max - min + 1;
-  int a, b, c, d;
-
-  a = rand();
-  b = rand();
-  c = rand();
-  d = a*b;
-  d = (d+c) % range;
-
-  return (min + d);
-
-}
 
 int randomInRange2(int min, int max){
 
@@ -181,37 +167,6 @@ word8 randomByte(){
     a = a % 16;
 
   return (word8) a;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*Multiplication*/
-
-word8 multiplicationX(word8 byte){
-
-  word8 bitTemp;
-
-  bitTemp = (byte>>3) & 0x1;
-  byte = (byte<<1) & 0xf;
-
-  if(bitTemp==0)
-    return byte;
-  else
-    return (byte^0x03);
-
-}
-
-/*Multiplication byte times x^n*/
-
-word8 multiplicationXN(word8 byte, int n){
-
-  int i;
-
-  for(i=0;i<n;i++)
-    byte=multiplicationX(byte);
-
-  return byte;
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

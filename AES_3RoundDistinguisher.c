@@ -4,6 +4,7 @@
 
 #include "AES_common.h"
 #include "AES_sbox.h"
+#include "multiplication.h"
 #include "subspace_checks.h"
 
 #define NUMBER_CP 20
@@ -11,52 +12,8 @@
 
 word8 play[NUMBER_CP][16], cipher[NUMBER_CP][16];
 
-int randomInRange(int min, int max){
-
-  int range = max - min + 1;
-  int a, b, c, d;
-
-  a = rand() % range;
-  b = rand() % range;
-  c = rand() % range;
-  d = (a*b) % range;
-  d = (d+c) % range;
-
-  return (min + d);
-
-}
-
 word8 randomByte(){
   return (word8) randomInRange(0, 255);
-}
-
-/*Multiplication byte per x*/
-
-word8 multiplicationX(word8 byte){
-
-  word8 bitTemp;
-
-  bitTemp=byte>>7;
-  byte=byte<<1;
-
-  if(bitTemp==0)
-    return byte;
-  else
-    return (byte^0x1B);
-
-}
-
-/*Multiplication byte per x^n*/
-
-word8 multiplicationXN(word8 byte, int n){
-
-  int i;
-
-  for(i=0;i<n;i++)
-    byte=multiplicationX(byte);
-
-  return byte;
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,62 +3,11 @@
 #include <time.h>
 
 #include "AES_common.h"
-
-const unsigned char sBox[16] = {
-  0x6, 0xB, 0x5, 0x4, 0x2, 0xE, 0x7, 0xA, 0x9, 0xD, 0xF, 0xC, 0x3, 0x1, 0x0, 0x8
-};
-
-//Inverse S-box
-const unsigned char inv_s[16] = {
-  0xE, 0xD, 0x4, 0xC, 0x3, 0x2, 0x0, 0x6, 0xF, 0x8, 0x7, 0x1, 0xB, 0x9, 0x5, 0xA
-};
-
-int randomInRange(int min, int max){
-
-  int range = max - min + 1;
-  int a, b, c, d;
-
-  a = rand() % range;
-  b = rand() % range;
-  c = rand() % range;
-  d = (a*b) % range;
-  d = (d+c) % range;
-
-  return (min + d);
-
-}
+#include "AES_smallScale_sbox.h"
+#include "multiplication.h"
 
 word8 randomByte(){
   return (word8) randomInRange(0, 15);
-}
-
-/*Multiplication*/
-
-word8 multiplicationX(word8 byte){
-
-  word8 bitTemp;
-
-  bitTemp = (byte>>3) & 0x1;
-  byte = (byte<<1) & 0xf;
-
-  if(bitTemp==0)
-    return byte;
-  else
-    return (byte^0x03);
-
-}
-
-/*Multiplication byte times x^n*/
-
-word8 multiplicationXN(word8 byte, int n){
-
-  int i;
-
-  for(i=0;i<n;i++)
-    byte=multiplicationX(byte);
-
-  return byte;
-
 }
 
 //EXAMPLE encryption

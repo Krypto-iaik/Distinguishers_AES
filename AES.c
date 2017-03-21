@@ -4,47 +4,12 @@
 
 #include "AES_common.h"
 #include "AES_sbox.h"
+#include "multiplication.h"
 
 #define NUMERO_PROVE 100
 
-int randomInRange(int min, int max){
-
-  int range = max - min + 1;
-  return (min + rand() % range);
-
-}
-
 word8 randomByte(){
   return (word8) randomInRange(0, 255);
-}
-
-/*Multiplication*/
-
-word8 multiplicationX(word8 byte){
-
-  word8 bitTemp;
-
-  bitTemp=byte>>7;
-  byte=byte<<1;
-
-  if(bitTemp==0)
-    return byte;
-  else
-    return (byte^0x1B);
-
-}
-
-/*Multiplication byte times x^n*/
-
-word8 multiplicationXN(word8 byte, int n){
-
-  int i;
-
-  for(i=0;i<n;i++)
-    byte=multiplicationX(byte);
-
-  return byte;
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

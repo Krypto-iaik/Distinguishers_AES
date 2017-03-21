@@ -1,6 +1,22 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "AES_common.h"
+
+int randomInRange(int min, int max){
+
+  int range = max - min + 1;
+  int a, b, c, d;
+
+  a = rand() % range;
+  b = rand() % range;
+  c = rand() % range;
+  d = (a*b) % range;
+  d = (d+c) % range;
+
+  return (min + d);
+
+}
 
 /*initialization state*/
 
