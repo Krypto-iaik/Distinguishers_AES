@@ -2,12 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include <stdio.h>
+#include "AES.h"
 
-#define N_Round 10
 #define NUMERO_PROVE 100
-
-typedef unsigned char word8;
 
 //S-box
 const unsigned char sBox[256] = {
