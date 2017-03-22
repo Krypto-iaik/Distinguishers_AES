@@ -6,7 +6,7 @@
 #include "AES_sbox.h"
 #include "multiplication.h"
 
-#define NUMERO_PROVE 100
+#define NUMBER_TEST 100
 
 word8 randomByte(){
   return (word8) randomInRange(0, 255);
@@ -15,11 +15,11 @@ word8 randomByte(){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
-//EXAMPLE encryption
+//EXAMPLE DECRYPTION
 
 int main(){
 
-  //Messaggio da decifrare
+  //Ciphertext
   const unsigned char initialMessage[4][4] = {
     0x69, 0x6a, 0xd8, 0x70,
     0xc4, 0x7b, 0xcd, 0xb4,
@@ -27,7 +27,7 @@ int main(){
     0xd8, 0x30, 0x80, 0x5a
   };
 
-  //chiave
+  //Key
   const unsigned char initialKey[4][4] = {
     0x00, 0x04, 0x08, 0x0c,
     0x01, 0x05, 0x09, 0x0d,
@@ -35,20 +35,20 @@ int main(){
     0x03, 0x07, 0x0b, 0x0f
   };
 
-  word8 messaggioDeCifrato[4][4];
+  word8 plaintext[4][4];
 
-  deencryption(initialMessage, initialKey, &(messaggioDeCifrato[0][0]));
+  deencryption(initialMessage, initialKey, &(plaintext[0][0]));
 
-  printf("messaggio cifrato\n");
+  printf("Ciphertext\n");
   printtt(initialMessage);
   printf("\n");
 
-  printf("chiave\n");
+  printf("key\n");
   printtt(initialKey);
   printf("\n");
 
-  printf("messaggio in chiaro\n");
-  printtt(messaggioDeCifrato);
+  printf("plaintext\n");
+  printtt(plaintext);
   printf("\n");
 
   return 0;
@@ -56,7 +56,7 @@ int main(){
 }*/
 
 /*
-//ESEMPIO CIFRATURA
+//EXAMPLE ENCRYPTION
 
 int main(){
 
@@ -96,7 +96,7 @@ int main(){
 
 }*/
 
-//prova - test
+/*TEST*/
 
 int main(){
 
@@ -104,13 +104,13 @@ int main(){
 
   int i, j, k, flag;
 
-  srand(1337);//time(NULL));
+  srand(1337);/*/time(NULL));*/
 
-  for(i=0;i<NUMERO_PROVE; i++){
+  for(i=0;i<NUMBER_TEST; i++){
 
     flag=0;
 
-    //genero chiave - messaggio iniziale
+    /*generation of (random) key and plaintext*/
 
     for(j=0;j<4;j++){
       for(k=0;k<4;k++){
@@ -119,17 +119,17 @@ int main(){
       }
     }
 
-    printf("messaggio iniziale\n");
+    printf("Plaintext\n");
     printtt(initialMessage);
     printf("\n");
 
-    printf("chiave iniziale\n");
+    printf("Master Key\n");
     printtt(initialKey);
     printf("\n");
 
     encryption(initialMessage, initialKey, finalMessage);
 
-    printf("messaggio cifrato\n");
+    printf("Ciphertext\n");
     printtt(finalMessage);
     printf("\n");
 
@@ -143,9 +143,9 @@ int main(){
     }
 
     if(flag==1)
-      printf("error %d\n", i);
+      printf("Error %d\n", i);
     else
-      printf("ok %d\n", i);
+      printf("OK %d\n", i);
 
   }
 
