@@ -203,7 +203,7 @@ int main()
 
     float n1, n2;
 
-    printf("CHECK COLLISION FOR 3-Round Reduced AES.\n\n");
+    printf("CHECK DISTINGUISHER for 3-Round Reduced AES.\n\n");
     printf("Number of texts: %d - Number of tests: %d\n\n", NUMBER_CP, NUMBER_TEST);
 
     //initialize seed
@@ -223,7 +223,7 @@ int main()
         if(nn2<nn)
         {
             flag = 1;
-            printf("Distinguisher FAIL!!!\n");
+            printf("Distinguisher FAILS!\n");
         }
         if(nn2==nn)
         {
@@ -238,12 +238,12 @@ int main()
     n2 = ((float) numero2)/NUMBER_TEST;
 
     printf("Conclusion:\n");
-    printf("Average number of collision - AES Case: %f\n", n2);
-    printf("Average number of collision - Random Case: %f\n\n", n1);
+    printf("Average number of collisions - AES Case: %f\n", n2);
+    printf("Average number of collisions - Random Case: %f\n\n", n1);
 
     if(flag==1)
     {
-        printf("Distinguisher FAIL at least one time!\n");
+        printf("Distinguisher FAILS at least one time!\n");
         return 0;
     }
     if(flag2==1)
