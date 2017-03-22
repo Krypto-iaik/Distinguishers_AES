@@ -21,7 +21,7 @@ word8 randomByte(){
 /**The function generates the number of texts (IN THE SAME COSET OF D) chosen by the parameter NUMBER_CP.
 Then, for each possible pairs it counts the number of pairs of texts that belong to the same coset of M.*/
 
-int subspaceTest(word8 key[4][4])
+int AEStest(word8 key[4][4])
 {
     int i, j, l, k, flag, flag2;
     int numero = 0;
@@ -212,12 +212,12 @@ int main()
     for(i=0; i < NUMBER_TEST; i++)
     {
         nn = randomTest(key);
-        nn2 = subspaceTest(key);
+        nn2 = AEStest(key);
 
         numero += nn;
         numero2 += nn2;
 
-        printf("Number of collisions - subspace case: %d\n", nn2);
+        printf("Number of collisions - AES case: %d\n", nn2);
         printf("Number of collisions - random case: %d\n", nn);
 
         if(nn2<nn)
@@ -238,7 +238,7 @@ int main()
     n2 = ((float) numero2)/NUMBER_TEST;
 
     printf("Conclusion:\n");
-    printf("Average number of collision - Subspace Case: %f\n", n2);
+    printf("Average number of collision - AES Case: %f\n", n2);
     printf("Average number of collision - Random Case: %f\n\n", n1);
 
     if(flag==1)
