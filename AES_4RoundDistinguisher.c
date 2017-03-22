@@ -200,7 +200,7 @@ int main()
         0x33, 0x77, 0xbb, 0xff
     };
 
-    int numero = 0, numero2 = 0;
+    int number = 0, number2 = 0;
 
     printf("IMPOSSIBLE DIFFERENTIAL DISTINGUISHER on 4-Round Reduced AES.\n\n");
     printf("The program checks that the probability that two texts collide in the same coset of M is 0 subspace case, ");
@@ -209,16 +209,16 @@ int main()
     //initialize seed
     srand (time(NULL));
 
-    numero = randomTest(key);
-    numero2 = AEStest(key);
+    number = randomTest(key);
+    number2 = AEStest(key);
 
-    printf("Number of collisions - AES case: %d\n", numero2);
-    printf("Number of collisions - random case: %d\n", numero);
+    printf("Number of collisions - AES case: %d\n", number2);
+    printf("Number of collisions - random case: %d\n", number);
 
-    if(numero2 != 0)
+    if(number2 != 0)
         printf("something FAILS...\n");
 
-    if(numero == 0)
+    if(number == 0)
         printf("Distinguisher can not take a decision...\n");
     else
         printf("Distinguisher WORKS!!!\n");
