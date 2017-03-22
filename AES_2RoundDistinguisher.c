@@ -203,7 +203,7 @@ int main()
 
     float n1, n2;
 
-    printf("CHECK COLLISION FOR 2-Round Reduced AES.\n\n");
+    printf("CHECK DISTINGUISHER for 2-Round Reduced AES.\n\n");
     printf("Number of texts: %d - Number of tests: %d\n\n", NUMBER_CP, NUMBER_TEST);
 
     //initialize seed
