@@ -1,19 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
-#define N_Round 10
-
-typedef unsigned char word8;
-
-const unsigned char sBox[16] = {
-  0x6, 0xB, 0x5, 0x4, 0x2, 0xE, 0x7, 0xA, 0x9, 0xD, 0xF, 0xC, 0x3, 0x1, 0x0, 0x8
-};
-
-//Inverse S-box
-const unsigned char inv_s[16] = {
-  0xE, 0xD, 0x4, 0xC, 0x3, 0x2, 0x0, 0x6, 0xF, 0x8, 0x7, 0x1, 0xB, 0x9, 0x5, 0xA
-};
+#include "AES_common.h"
 
 int randomInRange(int min, int max){
 
@@ -30,44 +18,9 @@ int randomInRange(int min, int max){
 
 }
 
-word8 randomByte(){
-  return (word8) randomInRange(0, 15);
-}
-
-/*Multiplication*/
-
-word8 multiplicationX(word8 byte){
-
-  word8 bitTemp;
-
-  bitTemp = (byte>>3) & 0x1;
-  byte = (byte<<1) & 0xf;
-
-  if(bitTemp==0)
-    return byte;
-  else
-    return (byte^0x03);
-
-}
-
-/*Multiplication byte times x^n*/
-
-word8 multiplicationXN(word8 byte, int n){
-
-  int i;
-
-  for(i=0;i<n;i++)
-    byte=multiplicationX(byte);
-
-  return byte;
-
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 /*initialization state*/
 
-void initialization(word8 *p, unsigned char initialMessage[][4]){
+void initialization(word8 *p, const word8 initialMessage[4][4]){
 
   int i, j;
 
@@ -79,7 +32,7 @@ void initialization(word8 *p, unsigned char initialMessage[][4]){
 
 }
 
-void initialization2(word8 *p, unsigned char initialMessage[][4]){
+void initialization2(word8 *p, const word8 initialMessage[4][4]){
 
   int i, j;
 
@@ -93,66 +46,15 @@ void initialization2(word8 *p, unsigned char initialMessage[][4]){
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*Add Round Key*/
-
-void addRoundKey(word8 *p, word8 key[][4]){
-
-  int i, j;
-
-  for(i=0; i<4; i++){
-    for(j=0; j<4; j++){
-      *(p+j+4*i) ^= key[i][j];
-    }
-  }
-
-}
-
-void addRoundKey2(word8 *p, word8 key[][4][N_Round+1], int costante){
-
-  int i, j;
-
-  for(i=0; i<4; i++){
-    for(j=0; j<4; j++){
-      *(p+j+4*i) ^= key[i][j][costante];
-    }
-  }
-
-}
-
-/*Inverse Add round key*/
-
-void invAddRoundKey(word8 *p, word8 key[][4][N_Round+1], int costante){
-
-  word8 keytemp[4][4];
-
-  int i, j;
-
-  for(i=0;i<4;i++){
-    for(j=0;j<4;j++)
-      keytemp[i][j]=key[i][j][costante];
-  }
-
-  inverseMixColumn(&(keytemp[0][0]));
-
-   for(i=0; i<4; i++){
-    for(j=0; j<4; j++){
-      *(p+j+4*i) ^= keytemp[i][j];
-    }
-  }
-
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 /*print the state*/
 
-void printtt(word8 file[][4]){
+void printtt(const word8 file[4][4]){
 
   int i, j;
 
   for(i=0; i<4; i++){
     for(j=0; j<4; j++){
-      printf("0x%x, ", file[i][j]);
+      printf("0x%02x, ", file[i][j]);
     }
     printf("\n");
   }
@@ -181,25 +83,25 @@ word8 inverseByteTransformation(word8 byte){
 
 /*ByteTransformation*/
 
-void byteSubTransformation(word8 *puntatore){
+void byteSubTransformation(word8 p[4][4]){
 
   int i, j;
 
   for(i=0; i<4; i++){
     for(j=0; j<4; j++)
-      *(puntatore+j+4*i)=byteTransformation(*(puntatore+j+4*i));
+      p[i][j]=byteTransformation(p[i][j]);
   }
 }
 
 /*Inverse Byte Transformation*/
 
-void inverseByteSubTransformation(word8 *puntatore){
+void inverseByteSubTransformation(word8 p[4][4]){
 
   int i, j;
 
   for(i=0; i<4; i++){
     for(j=0; j<4; j++)
-      *(puntatore+j+4*i)=inverseByteTransformation(*(puntatore+j+4*i));
+      p[i][j]=inverseByteTransformation(p[i][j]);
   }
 }
 
@@ -306,40 +208,40 @@ void generationRoundKey2(word8 *pKey, int numeroRound, word8 *pKeyPrecedente){
 
 /*shift rows*/
 
-void shiftRows(word8 *p){
+void shiftRows(word8 p[4][4]){
 
   word8 temp[3];
   int i, j;
 
   for(i=1;i<4;i++){
     for(j=0;j<i;j++)
-      temp[j]=*(p+4*i+j);
+      temp[j]=p[i][j];
 
     for(j=0;j<(4-i);j++)
-      *(p+4*i+j)=*(p+4*i+j+i);
+      p[i][j]=p[i][j+i];
 
     for(j=(4-i);j<4;j++)
-      *(p+4*i+j)=temp[j-4+i];
+      p[i][j]=temp[j-4+i];
   }
 
 }
 
 /*inverse shift rows*/
 
-void inverseShiftRows(word8 *p){
+void inverseShiftRows(word8 p[4][4]){
 
   word8 temp[3];
   int i, j;
 
   for(i=1;i<4;i++){
     for(j=3;j>(3-i);j--)
-      temp[j-1]=*(p+4*i+j);
+      temp[j-1]=p[i][j];
 
     for(j=3;j>i-1;j--)
-      *(p+4*i+j)=*(p+4*i+j-i);
+      p[i][j] = p[i][j-i];
 
     for(j=0;j<i;j++)
-      *(p+4*i+j)=temp[3-i+j];
+      p[i][j] = temp[3-i+j];
   }
 
 }
@@ -348,7 +250,7 @@ void inverseShiftRows(word8 *p){
 
 /*MixColumn*/
 
-void mixColumn(word8 *p){
+void mixColumn(word8 p[4][4]){
 
   int i, j;
   word8 colonna[4], nuovaColonna[4];
@@ -358,7 +260,7 @@ void mixColumn(word8 *p){
 
     //prendo la colonna i-sima
     for(j=0;j<4;j++){
-      colonna[j]=*(p + i + 4*j);
+      colonna[j]=p[j][i];
     }
 
     //calcolo nuova colonna
@@ -369,7 +271,7 @@ void mixColumn(word8 *p){
 
     //reinserisco colonna
     for(j=0;j<4;j++){
-      *(p + i + 4*j)=nuovaColonna[j];
+      p[j][i]=nuovaColonna[j];
     }
 
   }
@@ -378,7 +280,7 @@ void mixColumn(word8 *p){
 
 /*inverse MixColumn*/
 
-void inverseMixColumn(word8 *p){
+void inverseMixColumn(word8 p[4][4]){
 
   int i, j;
   word8 colonna[4], nuovaColonna[4];
@@ -388,7 +290,7 @@ void inverseMixColumn(word8 *p){
 
     //prendo la colonna i-sima
     for(j=0;j<4;j++){
-      colonna[j]=*(p + i + 4*j);
+      colonna[j]=p[j][i];
     }
 
     //calcolo nuova colonna
@@ -410,7 +312,7 @@ void inverseMixColumn(word8 *p){
 
     //reinserisco colonna
     for(j=0;j<4;j++){
-      *(p + i + 4*j)=nuovaColonna[j];
+      p[j][i]=nuovaColonna[j];
     }
 
   }
@@ -419,62 +321,113 @@ void inverseMixColumn(word8 *p){
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*Encryption of small scale AES*/
+/*Add Round Key*/
 
-void encryption(word8 initialMessage[][4], word8 initialKey[][4], word8 *ciphertext){
+void addRoundKey(word8 p[4][4], word8 key[][4]){
+
+  int i, j;
+
+  for(i=0; i<4; i++){
+    for(j=0; j<4; j++){
+      p[i][j] ^= key[i][j];
+    }
+  }
+
+}
+
+void addRoundKey2(word8 p[4][4], word8 key[][4][N_Round+1], int costante){
+
+  int i, j;
+
+  for(i=0; i<4; i++){
+    for(j=0; j<4; j++){
+      p[i][j] ^= key[i][j][costante];
+    }
+  }
+
+}
+
+/*Inverse Add round key*/
+
+void invAddRoundKey(word8 p[4][4], word8 key[][4][N_Round+1], int costante){
+
+  word8 keytemp[4][4];
+
+  int i, j;
+
+  for(i=0;i<4;i++){
+    for(j=0;j<4;j++)
+      keytemp[i][j]=key[i][j][costante];
+  }
+
+  inverseMixColumn(keytemp);
+
+   for(i=0; i<4; i++){
+    for(j=0; j<4; j++){
+      p[i][j] ^= keytemp[i][j];
+    }
+  }
+
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*Encryption*/
+
+void encryption(const word8 initialMessage[][4], const word8 initialKey[][4], word8 ciphertext[4][4]){
 
   int i, j;
 
   //initialization state
-  unsigned char state[4][4];
+  word8 state[4][4];
   initialization(&(state[0][0]), initialMessage);
 
   //initialization key
-  unsigned char key[4][4];
+  word8 key[4][4];
   initialization(&(key[0][0]), initialKey);
 
   //Initial Round
-  addRoundKey(&(state[0][0]), key);
+  addRoundKey(state, key);
 
   //Round
   for(i=0; i<N_Round-1; i++){
     generationRoundKey(&(key[0][0]), i);
-    byteSubTransformation(&(state[0][0]));
-    shiftRows(&(state[0][0]));
-    mixColumn(&(state[0][0]));
-    addRoundKey(&(state[0][0]), key);
+    byteSubTransformation(state);
+    shiftRows(state);
+    mixColumn(state);
+    addRoundKey(state, key);
 
   }
 
   //Final Round
   generationRoundKey(&(key[0][0]), N_Round-1);
-  byteSubTransformation(&(state[0][0]));
-  shiftRows(&(state[0][0]));
-  addRoundKey(&(state[0][0]), key);
+  byteSubTransformation(state);
+  shiftRows(state);
+  addRoundKey(state, key);
 
   //store the ciphertext
   for(i=0; i<4; i++){
     for(j=0; j<4; j++)
-      *(ciphertext+j+4*i)=state[i][j];
+      ciphertext[i][j]=state[i][j];
   }
 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*Decryption of small scale AES*/
+/*Decryption*/
 
-void decryption(word8 initialMessage[][4], word8 initialKey[][4], word8 *deciphertext){
+void decryption(const word8 initialMessage[][4], const word8 initialKey[][4], word8 plaintext[4][4]){
 
   int i, j;
 
   //initialization state
-  unsigned char state[4][4];
+  word8 state[4][4];
   initialization(&(state[0][0]), initialMessage);
 
   //compute keys//
 
-  unsigned char key[4][4][N_Round+1];
+  word8 key[4][4][N_Round+1];
   //initialization key
   initialization2(&(key[0][0][0]), initialKey);
 
@@ -485,72 +438,26 @@ void decryption(word8 initialMessage[][4], word8 initialKey[][4], word8 *deciphe
 
 
   //Initial Round
-  addRoundKey2(&(state[0][0]), key, N_Round);
+  addRoundKey2(state, key, N_Round);
 
 
   //Round
   for(i=N_Round-1; i>0; i--){
-    inverseByteSubTransformation(&(state[0][0]));
-
-    inverseShiftRows(&(state[0][0]));
-
-    inverseMixColumn(&(state[0][0]));
-
-    invAddRoundKey(&(state[0][0]), key, i);
+    inverseByteSubTransformation(state);
+    inverseShiftRows(state);
+    inverseMixColumn(state);
+    invAddRoundKey(state, key, i);
 
   }
 
   //Final Round
-  inverseByteSubTransformation(&(state[0][0]));
-  inverseShiftRows(&(state[0][0]));
-  addRoundKey2(&(state[0][0]), key, 0);
+  inverseByteSubTransformation(state);
+  inverseShiftRows(state);
+  addRoundKey2(state, key, 0);
 
   for(i=0;i<4;i++){
     for(j=0;j<4;j++)
-      *(deciphertext+j+4*i)=state[i][j];
+      plaintext[i][j]=state[i][j];
   }
-
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-//EXAMPLE encryption
-
-int main(){
-
-  //plaintext
-  const unsigned char initialMessage[4][4] = {
-    0x00, 0x44, 0x88, 0xcc,
-    0x11, 0x55, 0x99, 0xdd,
-    0x22, 0x66, 0xaa, 0xee,
-    0x33, 0x77, 0xbb, 0xff
-  };
-
-  //key
-  const unsigned char initialKey[4][4] = {
-    0x00, 0x04, 0x08, 0x0c,
-    0x01, 0x05, 0x09, 0x0d,
-    0x02, 0x06, 0x0a, 0x0e,
-    0x03, 0x07, 0x0b, 0x0f
-  };
-
-  unsigned char finalMessage[4][4];
-
-  encryption(initialMessage, initialKey, &(finalMessage[0][0]));
-
-  printf("plaintext\n");
-  printtt(initialMessage);
-  printf("\n");
-
-  printf("key\n");
-  printtt(initialKey);
-  printf("\n");
-
-  printf("ciphertext\n");
-  printtt(finalMessage);
-  printf("\n");
-
-  return 0;
 
 }
